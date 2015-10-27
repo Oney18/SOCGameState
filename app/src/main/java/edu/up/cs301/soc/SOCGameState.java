@@ -1,5 +1,6 @@
 package edu.up.cs301.soc;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import edu.up.cs301.game.infoMsg.GameState;
@@ -11,10 +12,16 @@ public class SOCGameState extends GameState {
     private int playersID; //ID of the player whose turn it is
     private int score0; //player 0's score
     private int score1; //player 1's score
-    private int score2;
-    private int score3;
-    private int runningScore; //current score that would be won if hold is selected
-    private int die; //die's current value
+    private int score2; //player 2's score
+    private int score3; //player 3's score
+    private int die1; //the red die
+    private int die2; //the yellow die
+    private int robber; //where the robber is
+    private Road[] roads; //all the road spots
+    private Tile[] tiles; //all the tiles
+    private Building[] buildings; //all the building spots
+    private Hand[] hands; //the players' hands
+
     private Random rng = new Random();
 
     public SOCGameState()
@@ -22,21 +29,57 @@ public class SOCGameState extends GameState {
         playersID = 0;
         score0 = 0;
         score1 = 0;
-        runningScore = 0;
-        die = 1;
+        score2 = 0;
+        score3 = 0;
+        die1 = 1;
+        die2 = 1;
+        robber = 9;
+
+        roads = new Road[72];
+        for(int i = 0; i < roads.length; i++)
+        {
+            roads[i] = new Road();
+        }
+
+        tiles = new Tile[19];
+        for(int i = 0; i < tiles.length; i++)
+        {
+            tiles[i] = new Tile();
+        }
+
+        buildings = new Building[54];
+        for(int i = 0; i < buildings.length; i++)
+        {
+            buildings[i] = new Building();
+        }
+
+        hands = new Hand[4];
+        for(int i = 0; i < hands.length; i++)
+        {
+            hands[i] = new Hand();
+        }
     }
 
-    public SOCGameState(int ID, int score0, int score1, int runScore, int die)
+    public SOCGameState(int ID, int score0, int score1, int score2, int score3, int die1, int die2,
+                        int robber, Road[] roads, Tile[] tiles, Building[] buildings, Hand[] hands)
     {
         this.playersID = ID;
         this.score0 = score0;
         this.score1 = score1;
-        this.runningScore = runScore;
-        this.die = die;
+        this.score2 = score2;
+        this.score3 = score3;
+        this.die1 = die1;
+        this.die2 = die2;
+        this.roads = roads;
+        this.tiles = tiles;
+        this.buildings = buildings;
+        this.hands = hands;
     }
 
-    public SOCGameState(SOCGameState p){
-        this(p.getPlayersID(), p.getScore0(), p.getScore1(), p.getRunningScore(), p.getDie());
+    public SOCGameState(SOCGameState soc){
+        this(soc.getPlayersID(), soc.getScore0(), soc.getScore1(), soc.getScore2(), soc.getScore3(),
+                soc.getDie1(), soc.getDie2(), soc.getRobber(), soc.getRoads(), soc.getTiles(), soc.getBuildings(),
+                soc.getHands());
     }
 
     public int getPlayersID()
@@ -59,46 +102,66 @@ public class SOCGameState extends GameState {
         return score2;
     }
 
-    public int getRunningScore()
+    public int getScore3()
     {
-        return runningScore;
+        return score3;
     }
 
-    public int getDie()
+    public int getDie1()
     {
-        return die;
+        return die1;
     }
 
-    public void hold()
+    public int getDie2()
     {
-        switch(this.getPlayersID())
-        {
-            case 0:
-                score0 += runningScore;
-                runningScore = 0;
-                playersID = 1;
-                break;
-
-            case 1:
-                score1 += runningScore;
-                runningScore = 0;
-                playersID = 0;
-                break;
-        }
+        return die2;
     }
 
     public void roll()
     {
-        die = rng.nextInt(6) + 1;
+        die1 = rng.nextInt(6) + 1;
+        die2 = rng.nextInt(6) + 1;
 
-        if(die == 1)
+        if(die1 + die2 == 7)
         {
-            runningScore = 0;
-            playersID = 1 - playersID;
+            //do robber stuff
         }
-        else
+    }
+
+    public int getRobber()
+    {
+        return robber;
+    }
+
+    public Road[] getRoads()
+    {
+        return roads;
+    }
+
+    public Tile[] getTiles()
+    {
+        return tiles;
+    }
+
+    public Building[] getBuildings()
+    {
+        return buildings;
+    }
+
+    public Hand[] getHands()
+    {
+        return hands;
+    }
+
+    public void buildRoad(int spot)
+    {
+        if(!roads[spot].isEmpty())
         {
-            runningScore += die;
+            return; //something is there!
+        }
+        if(hands[playersID].getBricks() == 0 || hands[playersID].getWood() == 0)
+        {
+            return; //lacking resources!
         }
     }
 }
