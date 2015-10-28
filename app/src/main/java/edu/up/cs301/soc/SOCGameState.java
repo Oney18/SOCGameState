@@ -159,7 +159,20 @@ public class SOCGameState extends GameState {
         {
             return; //something is there!
         }
-        if(hands[playersID].getBricks() == 0 || hands[playersID].getWood() == 0)
+        if(hands[playersID].getBricks() < 1 || hands[playersID].getWood() < 1)
+        {
+            return; //lacking resources!
+        }
+    }
+
+    public void buildSettlement(int spot)
+    {
+        if(!buildings[spot].isEmpty())
+        {
+            return; //something is there!
+        }
+        if(hands[playersID].getWheats() < 1 || hands[playersID].getSheep() < 1 || hands[playersID].getWood() < 1
+                || hands[playersID].getBricks() < 1)
         {
             return; //lacking resources!
         }
