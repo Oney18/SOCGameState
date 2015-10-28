@@ -13,6 +13,7 @@ public class Road {
     private boolean isEmpty;
     private int player;
     private int [] adjacentRoads;
+    private int [] adjacentBuildings;
     public static final int EMPTY = -1;
     public static final int TOTAL_NUMBER_OF_ROAD_SPOTS = 72;
     public static final int SMALLEST_NUMBER_OF_ROAD_SPOTS = 0;

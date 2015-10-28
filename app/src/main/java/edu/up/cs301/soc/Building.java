@@ -13,6 +13,8 @@ public class Building {
     private boolean isEmpty;
     private int player;
     private int typeOfBuilding;
+    private int [] adjacentRoads;
+    private int [] adjacentTiles;
     public static final int EMPTY = -1;
     public static final int SETTLEMENT = 0;
     public static final int CITY = 1;
